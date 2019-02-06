@@ -1,7 +1,5 @@
 class Pet < Application
   attr_accessor :name, :color, :person_id
-  def associate
-    belongs_to(:owner, Person, :person_id)
-    has_many(:toys, Toy)
-  end
+  belongs_to :owner, { class_name: 'Person' }, :person_id
+  has_many :toys, class_name: 'Toy'
 end

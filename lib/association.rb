@@ -1,34 +1,31 @@
-class Association
-  require 'forwardable'
-
-  def has_many(name, model)
-    if model.is_a?(Hash)
-      has_many_through(name, model)
+module Association
+  def has_many(name, model_name)
+    if model_name.keys.first == :class_name
+      has_many_simple(name, model_name)
     else
-      has_many_simple(name, model)
+      has_many_through(name, model_name)
     end
   end
 
-  def belongs_to(name, model, target_id)
-    self.class.define_method(name) do
-      model.all.find { |m| m.id == self.send(target_id.to_s) }
+  def belongs_to(name, model_name, target_id)
+    self.define_method(name) do
+      Object.const_get(model_name[:class_name]).all.find { |m| m.id == self.send(target_id.to_s) }
     end
   end
 
   private
 
-  def has_many_simple(name, model)
+  def has_many_simple(name, model_name)
     # Creates method named as the param name says.
-    self.class.define_method(name) do
-      # Select those that has the same id that current model.
-      model.all.select { |m| m.send("#{self.class.name.snakecase}_id") == @id }
+    self.define_method(name) do
+      # Select those that has the same id that current model_name.
+      Object.const_get(model_name[:class_name]).all.select { |m| m.send("#{self.class.name.snakecase}_id") == @id }
     end
   end
 
-  def has_many_through(name, common_model)
-    p common_model
-    self.class.define_method(name) do
-      self.send(common_model[:through]).select do |m|
+  def has_many_through(name, common_model_name)
+    self.define_method(name) do
+      self.send(common_model_name[:through]).select do |m|
         m.send("#{self.class.name.snakecase}_id") == @id
       end.map { |m| m.send(name.to_s) }.flatten
     end

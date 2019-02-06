@@ -1,8 +1,10 @@
-class Application < Association
-  require 'snake_camel'
-  require_relative './application/record'
-  require_relative './application/index'
+require_relative './application/record'
+require_relative './application/index'
+require_relative './association'
 
+class Application
+  require 'snake_camel'
+  extend Association
   attr_reader :id
 
   def self.all
@@ -20,7 +22,6 @@ class Application < Association
   #private
 
   def initialize(args = nil)
-    associate
     Record.track(self)
     @id = Index.next_id(self)
   end
