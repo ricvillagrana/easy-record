@@ -13,8 +13,20 @@
 class Person < Application
   attr_accessor :name, :age
 
-  def associate
-    has_many :pets, Pet # Pet class should exists
-  end
+  has_many :pets, class_name: 'Pet'
+  has_many :toys, through: :pet
+end
+
+class Pet < Application
+  attr_accessor :name, :color, :person_id
+
+  belongs_to :owner, { class_name: 'Person' }, :person_id
+  has_many :toys, class_name: 'Toy'
+end
+
+class Toy < Application
+  attr_accessor :name, :pet_id
+
+  belongs_to(:owner, Pet, :pet_id)
 end
 ```
