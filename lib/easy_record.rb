@@ -1,9 +1,10 @@
 require_relative './application/record'
 require_relative './application/index'
-require_relative './association'
+require_relative './application/association'
 
-class Application
+class EasyRecord
   require 'snake_camel'
+
   extend Association
   attr_reader :id
 
@@ -18,8 +19,6 @@ class Application
   def self.last
     self.all.last
   end
-
-  #private
 
   def initialize(args = nil)
     Record.track(self)
