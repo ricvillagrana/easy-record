@@ -1,6 +1,6 @@
-require_relative './application/record'
-require_relative './application/index'
-require_relative './application/association'
+require_relative './easy_record/record'
+require_relative './easy_record/index'
+require_relative './easy_record/association'
 
 class EasyRecord
   require 'snake_camel'
