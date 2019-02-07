@@ -4,6 +4,7 @@ require_relative './application/association'
 
 class EasyRecord
   require 'snake_camel'
+  require 'pry'
 
   extend Association
   attr_reader :id
@@ -20,10 +21,21 @@ class EasyRecord
     self.all.last
   end
 
-  def initialize(args = nil)
+  def initialize(attributes = nil)
     Record.track(self)
     @id = Index.next_id(self)
+
+    set_attributes(attributes)
   end
 
+  private
+
+  def set_attributes(attributes)
+    attributes.each { |key, value| set(key, value) } if attributes.is_a?(Hash)
+  end
+
+  def set(key, value)
+    self.send("#{key}=", value)
+  end
 
 end
