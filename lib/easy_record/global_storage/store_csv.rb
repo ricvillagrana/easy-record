@@ -31,12 +31,14 @@ module GlobalStorage
     end
 
     def save_record(record)
-      records = csv_body
-      index = csv_index_of(record)
-      if index
-        records[index] = record
-      else
-        records << record
+      records = csv_body.nil? ? [record] : csv_body
+      unless csv_body.nil?
+        index = csv_index_of(record)
+        if index
+          records[index] = record
+        else
+          records << record
+        end
       end
       write_to_csv(csv_headers, records)
     end
@@ -49,7 +51,9 @@ module GlobalStorage
     end
 
     def csv_index_of(record)
-      csv_body.index(csv_body.find { |row| row[csv_headers.index('id')].to_i == record.id.to_i } )
+      csv_body.index(csv_body.find do |row|
+        row[csv_headers.index('id')].to_i == record.id.to_i
+      end) unless csv_body.nil?
     end
 
     def csv_exist?
@@ -75,11 +79,11 @@ module GlobalStorage
     private
 
     def csv_headers
-      csv_data.to_a.shift
+      csv_exist? ? csv_data.to_a.shift : instance_headers
     end
 
     def csv_body
-      csv_data.to_a[1..-1]
+      csv_data.to_a[1..-1] unless csv_data.nil?
     end
 
     def class_name
@@ -87,7 +91,7 @@ module GlobalStorage
     end
 
     def csv_data
-      CSV.read(csv_filename, headers: true)
+      CSV.read(csv_filename, headers: true) if csv_exist?
     end
 
     def instance_headers
