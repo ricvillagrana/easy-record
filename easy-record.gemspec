@@ -1,10 +1,17 @@
 Gem::Specification.new do |s|
   s.name        = 'easy-record'
-  s.version     = '0.1.0'
+  s.version     = '0.1.1.alpha1'
   s.summary     = "Easy Record"
   s.description = "Easy Record allows you to create associations between models and store them in disk"
   s.authors     = ["Ricardo Rafael Villagrana Larios"]
   s.email       = 'ricardovillagranal@gmail.com '
   s.homepage    = 'http://github.com/ricvillagrana/easy-record'
-  s.files       = ["lib/easy_record.rb", "lib/application/association.rb", "lib/application/index.rb", "lib/application/record.rb"]
+  s.files       = [
+    "lib/easy_record.rb",
+    "lib/easy_record/association.rb",
+    "lib/easy_record/index.rb",
+    "lib/easy_record/record.rb",
+    "lib/easy_record/storage",
+    "lib/easy_record/storage/store_csv.rb",
+  ]
 end

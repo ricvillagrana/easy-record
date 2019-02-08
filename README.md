@@ -1,9 +1,10 @@
 # Easy Record
+#### v0.1.1.alpha1
 Easy Record (easy_record) is a lightweight gem based on ActiveRecord, you can relate models only so
 far, but check te Features / Known issues to see what is planned to do. You can also open issues and
 PRs.
 
-## Installing
+## Installation
 From terminal
 
 `gem install easy-record`
@@ -17,9 +18,20 @@ In Gemfile
   - [x] `belongs_to`.
   - [x] `has_many`.
   - [x] `has_many :through`.
+- [x] Initialize with hash values.
 - [ ] Relate models easier.
-- [ ] Save to disk (as JSON).
-- [ ] Restore from disk (JSON files).
+- [ ] Save to CSV
+  - [x] Save to disk (as CSV).
+  - [x] Restore from disk (CSV files).
+  - [ ] Save a single instance (append).
+  - [ ] Update a single instance (Rewrite only those records that are saved).
+  - [ ] Delete single records and untrack them.
+- [ ] Save to JSON
+  - [ ] Save to disk (as JSON).
+  - [ ] Restore from disk (JSON files).
+  - [ ] Save a single instance (append).
+  - [ ] Update a single instance (Rewrite only those records that are saved).
+  - [ ] Delete single records and untrack them.
 
 ## Usage
 ```ruby
@@ -62,5 +74,13 @@ person.toys # => Array of toys
 pet.toys # => Array of toys
 
 toy.owner.owner # => person
+```
+
+## Save
+```ruby
+ClassName.save_to_csv # Will save all tracked instances
+ClassName.load_from_csv # Will load and track all rows in csv (CSV has headers)
+
+instance.save # Not working yet
 ```
 
