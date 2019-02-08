@@ -1,13 +1,16 @@
 require_relative './easy_record/record'
 require_relative './easy_record/index'
 require_relative './easy_record/association'
+require_relative './easy_record/storage'
 
 class EasyRecord
   require 'snake_camel'
   require 'pry'
 
   extend Association
-  attr_reader :id
+  extend Storage
+
+  attr_accessor :id
 
   def self.all
     Record.of(self.to_s)
