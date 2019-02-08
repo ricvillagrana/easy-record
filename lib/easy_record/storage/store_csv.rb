@@ -3,11 +3,12 @@ module Storage
     require 'csv'
     require 'snake_camel'
 
-    def save_as_csv
-
+    def save_to_csv
+      self.class.save_record(self)
     end
 
-    def load_from_csv
+    def destroy_from_csv
+      self.class.destroy_record(self)
     end
 
     private
@@ -18,6 +19,14 @@ module Storage
 
     def class_name
       self.class.name
+    end
+
+    def headers
+      csv_data.to_a.shift
+    end
+
+    def body
+      csv_data.to_a[1..-1]
     end
 
     def csv_data

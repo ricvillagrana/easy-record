@@ -1,5 +1,4 @@
 require_relative './easy_record/record'
-require_relative './easy_record/index'
 require_relative './easy_record/association'
 require_relative './easy_record/global_storage'
 require_relative './easy_record/storage'
@@ -7,6 +6,7 @@ require_relative './easy_record/storage'
 class EasyRecord
   require 'snake_camel'
   require 'pry'
+  require 'UUID'
 
   extend Association
   extend GlobalStorage
@@ -28,9 +28,10 @@ class EasyRecord
 
   def initialize(attributes = nil)
     Record.track(self)
-    @id = Index.next_id(self)
 
     set_attributes(attributes)
+    p attributes.keys
+    set(:id, UUID.generate) unless attributes.keys.include?('id')
   end
 
   private
