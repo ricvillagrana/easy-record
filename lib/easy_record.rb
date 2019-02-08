@@ -1,6 +1,7 @@
 require_relative './easy_record/record'
 require_relative './easy_record/index'
 require_relative './easy_record/association'
+require_relative './easy_record/global_storage'
 require_relative './easy_record/storage'
 
 class EasyRecord
@@ -8,7 +9,8 @@ class EasyRecord
   require 'pry'
 
   extend Association
-  extend Storage
+  extend GlobalStorage
+  include Storage
 
   attr_accessor :id
 
