@@ -5,7 +5,8 @@ Gem::Specification.new do |s|
   s.description = "Easy Record allows you to create associations between models and store them in disk"
   s.authors     = ["Ricardo Rafael Villagrana Larios"]
   s.email       = 'ricardovillagranal@gmail.com '
-  s.homepage    = 'http://github.com/ricvillagrana/easy-record'
+  s.homepage    = 'https://ricvillagrana.github.io/easy-record/'
+  s.metadata    = { "source_code_uri" => "https://github.com/ricvillagrana/easy-record" }
   s.files       = [
     "lib/easy_record.rb",
     "lib/easy_record/association.rb",
