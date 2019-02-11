@@ -7,10 +7,8 @@ module GlobalStorage
       CSV.open(csv_filename, 'wb') do |csv|
         csv << headers
         records.each do |record|
-          if record.is_a?(Array)
-            csv << record
-          else
-            csv << headers.map { |attr| record.send(attr) }
+          record.is_a?(Array) ? csv << record : csv << headers.map do |attr|
+            record.send(attr)
           end
         end
       end
@@ -21,6 +19,7 @@ module GlobalStorage
     end
 
     def load_from_csv
+      p csv_structs
       read_from_csv.each do |record|
         self.new(record)
       end
@@ -31,22 +30,16 @@ module GlobalStorage
     end
 
     def save_record(record)
-      records = csv_body.nil? ? [record] : csv_body
-      unless csv_body.nil?
-        index = csv_index_of(record)
-        if index
-          records[index] = record
-        else
-          records << record
-        end
-      end
-      write_to_csv(csv_headers, records)
+      to_replace = csv_structs.find { |row| row.id == record.id }
+      records = csv_structs
+      records[records.index(to_replace)] = record
+      write_to_csv(headers, records)
     end
 
     def destroy_record(record)
       records = csv_body
       if records.delete_at(csv_index_of(record))
-        write_to_csv(csv_headers, records)
+        write_to_csv(headers, records)
       end
     end
 
@@ -77,6 +70,13 @@ module GlobalStorage
     end
 
     private
+
+    def csv_structs
+      struct = Struct.new(class_name, *csv_headers)
+      csv_body.each_with_index.map do |row, index|
+        struct.new(*row)
+      end
+    end
 
     def csv_headers
       csv_exist? ? csv_data.to_a.shift : instance_headers
