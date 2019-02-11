@@ -8,9 +8,9 @@ module Association
     end
   end
 
-  def belongs_to(name, model_name, target_id)
+  def belongs_to(name, model, target_id)
     self.define_method(name) do
-      Object.const_get(model_name[:class_name]).all.find { |m| m.id == self.send(target_id.to_s) }
+      Object.const_get(model[:class_name]).all.find { |m| m.id == self.send(target_id.to_s) }
     end
   end
 
