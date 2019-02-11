@@ -1,5 +1,5 @@
 # Easy Record
-#### v0.1.1.alpha1
+#### v0.1.1.alpha2
 Easy Record (easy_record) is a lightweight gem based on ActiveRecord, you can relate models only so
 far, but check te Features / Known issues to see what is planned to do. You can also open issues and
 PRs.
@@ -11,7 +11,7 @@ From terminal
 
 In Gemfile
 
-`gem 'easy-record', '~> 0.1.0'`
+`gem 'easy-record', '~> 0.1.1.alpha2'`
 
 ## Features / Known issues
 - [x] Models associations.
@@ -20,12 +20,12 @@ In Gemfile
   - [x] `has_many :through`.
 - [x] Initialize with hash values.
 - [ ] Relate models easier.
-- [ ] Save to CSV
+- [x] Save to CSV
   - [x] Save to disk (as CSV).
   - [x] Restore from disk (CSV files).
-  - [ ] Save a single instance (append).
-  - [ ] Update a single instance (Rewrite only those records that are saved).
-  - [ ] Delete single records and untrack them.
+  - [x] Save a single instance (append).
+  - [x] Update a single instance (Rewrite only those records that are saved).
+  - [x] Delete single records and untrack them.
 - [ ] Save to JSON
   - [ ] Save to disk (as JSON).
   - [ ] Restore from disk (JSON files).

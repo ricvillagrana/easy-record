@@ -2,6 +2,7 @@ module GlobalStorage
   module StoreCSV
     require 'csv'
     require 'snake_camel'
+    require_relative '../record'
 
     def write_to_csv(headers, records)
       CSV.open(csv_filename, 'wb') do |csv|
@@ -46,9 +47,12 @@ module GlobalStorage
     end
 
     def destroy_record(record)
-      records = csv_body
-      if records.delete_at(csv_index_of(record))
-        write_to_csv(headers, records)
+      records = csv_structs
+      to_delete = records.find { |row| row.id == record.id }
+      if records.delete_at(records.index(to_delete))
+        write_to_csv(csv_headers, records)
+        tracked = Record.of(class_name).find { |row| row.id == record.id }
+        Record.untrack(tracked)
       end
     end
 

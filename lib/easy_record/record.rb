@@ -18,8 +18,8 @@ module Record
 
   def self.untrack(instance)
     # Delete the record from tracked records
-    index = $records.index(instance)
-    $records.delete_at(index) unless index.nil?
+    index = $records[instance.class.name].index(instance)
+    $records[instance.class.name].delete_at(index) unless index.nil?
     $records
   end
 
