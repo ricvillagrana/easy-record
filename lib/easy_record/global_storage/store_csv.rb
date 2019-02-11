@@ -30,10 +30,19 @@ module GlobalStorage
     end
 
     def save_record(record)
-      to_replace = csv_structs.find { |row| row.id == record.id }
+      return first_save(record) unless csv_exist?
       records = csv_structs
-      records[records.index(to_replace)] = record
-      write_to_csv(headers, records)
+      to_replace = records.find { |row| row.id == record.id }
+      unless to_replace.nil?
+        records[records.index(to_replace)] = record
+      else
+        records << record
+      end
+      write_to_csv(csv_headers, records)
+    end
+
+    def first_save(record)
+      write_to_csv(instance_headers, [record])
     end
 
     def destroy_record(record)
