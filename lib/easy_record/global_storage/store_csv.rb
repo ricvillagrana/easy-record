@@ -15,7 +15,7 @@ module GlobalStorage
       end
     end
 
-    def save_as_csv
+    def save
       write_to_csv(instance_headers, self.all)
     end
 
