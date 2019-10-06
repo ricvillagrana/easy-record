@@ -3,7 +3,7 @@ module Storage
     require 'csv'
     require 'snake_camel'
 
-    def save_to_csv
+    def save
       self.class.save_record(self)
     end
 
