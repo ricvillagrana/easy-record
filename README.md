@@ -78,7 +78,7 @@ toy.owner.owner # => person
 
 ## Save
 ```ruby
-ClassName.save_to_csv # Will save all tracked instances
+ClassName.save # Will save all tracked instances
 ClassName.load_from_csv # Will load and track all rows in csv (CSV has headers)
 
 instance.save # Not working yet
