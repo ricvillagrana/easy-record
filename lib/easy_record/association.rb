@@ -2,7 +2,7 @@ module Association
   def has_many(name, model_name)
     # Determinate if second param is a class_name or a through class
     if model_name.keys.first == :class_name
-      has_many_simple(name, model_name)
+      has_many_directly(name, model_name)
     else
       has_many_through(name, model_name)
     end
@@ -16,7 +16,7 @@ module Association
 
   private
 
-  def has_many_simple(name, model_name)
+  def has_many_directly(name, model_name)
     # Create method named as the param name says.
     self.define_method(name) do
       # Select those that has the same id that current model_name.
