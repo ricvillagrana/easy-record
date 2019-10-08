@@ -23,7 +23,6 @@ In Gemfile
   - [x] `has_many`.
   - [x] `has_many :through`.
 - [x] Initialize with hash values.
-- [ ] Relate models easier.
 - [ ] Save to JSON
   - [ ] Save to disk (as JSON).
   - [ ] Restore from disk (JSON files).
@@ -80,13 +79,4 @@ person.toys # => Array of toys
 pet.toys # => Array of toys
 
 toy.owner.owner # => person
-```
-
-### Saving
-```ruby
-ClassName.save_all # Will save all tracked instances
-ClassName.load_all # Will load and track all rows
-
-instance.save
-instance.destroy
 ```

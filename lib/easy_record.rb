@@ -1,6 +1,5 @@
 require_relative './easy_record/record'
 require_relative './easy_record/association'
-require_relative './easy_record/global_storage'
 require_relative './easy_record/storage'
 
 class EasyRecord
@@ -9,7 +8,6 @@ class EasyRecord
   require 'UUID'
 
   extend Association
-  extend GlobalStorage
   include Storage
 
   attr_accessor :id
