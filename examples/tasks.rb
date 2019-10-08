@@ -28,7 +28,7 @@ class Task < EasyRecord
   end
 end
 
-user = User.new
+user = User.new(name: "test")
 list = List.new(user_id: user.id)
 5.times do |i|
   Task.new(name: "Task ##{i}", list_id: list.id)
@@ -38,5 +38,8 @@ user.tasks_left
 user.tasks.first.toggle
 user.tasks_left
 
+puts User.pluck(:name)
+puts User.pluck(:name, :id)
+puts User.count
 binding.pry
 

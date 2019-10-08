@@ -12,16 +12,36 @@ class EasyRecord
 
   attr_accessor :id
 
-  def self.all
-    Record.of(self.to_s)
-  end
+  class << self
+    def all
+      Record.of(self.to_s)
+    end
 
-  def self.first
-    self.all.first
-  end
+    def pluck(*attributes)
+      return [] if attributes.length.eql?(0)
+      return all.collect { |record| record.send(attributes.first) } if attributes.length.eql?(1)
+      all.collect do |record|
+        attributes.collect do |attr|
+          record.send(attr)
+        end
+      end
+    end
 
-  def self.last
-    self.all.last
+    def count
+      all.length
+    end
+
+    def ids
+      all.collect(&:id)
+    end
+
+    def first
+      all.first
+    end
+
+    def last
+      all.last
+    end
   end
 
   def initialize(attributes = nil)
