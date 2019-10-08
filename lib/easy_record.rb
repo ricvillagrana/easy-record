@@ -28,7 +28,7 @@ class EasyRecord
     Record.track(self)
 
     set_attributes(attributes)
-    set(:id, UUID.generate) unless attributes.keys.include?('id')
+    set(:id, UUID.generate)
   end
 
   private
