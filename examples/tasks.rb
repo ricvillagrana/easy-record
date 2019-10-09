@@ -12,14 +12,14 @@ class User < EasyRecord
 end
 
 class List < EasyRecord
-  attr_accessor :name, :user_id
+  attr_accessor :name
 
   belongs_to :user, { class_name: 'Person' }, 'user_id'
   has_many :tasks, class_name: 'Task'
 end
 
 class Task < EasyRecord
-  attr_accessor :name, :done, :list_id
+  attr_accessor :name, :done
 
   belongs_to :list, { class_name: 'List' }, 'list_id'
 
@@ -41,5 +41,8 @@ user.tasks_left
 puts User.pluck(:name)
 puts User.pluck(:name, :id)
 puts User.count
+
+puts list.user_id
+
 binding.pry
 
