@@ -8,8 +8,15 @@ module Association
   end
 
   def belongs_to(name, model, target_id)
+    self.send(:define_method, "#{target_id}=".to_sym) do |value|
+      instance_variable_set("@" + target_id.to_s, value)
+    end
+
+    self.send(:define_method, target_id.to_sym) do
+      instance_variable_get("@" + target_id.to_s)
+    end
+
     self.define_method(name) do
-      binding.pry
       Object.const_get(model[:class_name]).all.find do |m|
         m.id == self.send(target_id.to_s)
       end
