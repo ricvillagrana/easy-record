@@ -5,7 +5,7 @@ require_relative './easy_record/storage'
 class EasyRecord
   require 'snake_camel'
   require 'pry'
-  require 'UUID'
+  require 'uuid'
 
   extend Association
   include Storage
