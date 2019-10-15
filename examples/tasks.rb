@@ -14,7 +14,7 @@ end
 class List < EasyRecord
   attr_accessor :name
 
-  belongs_to :user, { class_name: 'Person' }, 'user_id'
+  belongs_to :user, { class_name: 'User' }, 'user_id'
   has_many :tasks, class_name: 'Task'
 end
 
