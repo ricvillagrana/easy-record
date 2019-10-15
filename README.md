@@ -17,66 +17,54 @@ In Gemfile
 
 `gem 'easy-record', '~> 0.2.0'`
 
-## Features / Known issues
-- [x] Models associations.
-  - [x] `belongs_to`.
-  - [x] `has_many`.
-  - [x] `has_many :through`.
-- [x] Initialize with hash values.
-- [ ] Save to JSON
-  - [ ] Save to disk (as JSON).
-  - [ ] Restore from disk (JSON files).
-  - [ ] Save a single instance (append).
-  - [ ] Update a single instance (Rewrite only those records that are saved).
-  - [ ] Delete single records and untrack them.
-- [ ] Soft delete
-
 ## Usage
 
 ### Models definitions
 ```ruby
 require 'easy_record'
-class Person < EasyRecord
-  attr_accessor :name, :age
+class User < EasyRecord
+  attr_accessor :name
 
-  has_many :pets, class_name: 'Pet'
-  has_many :toys, through: :pets
+  has_many :lists, class_name: 'List'
+  has_many :tasks, through: :lists
+
+  def tasks_left
+    self.tasks.select { |task| !task.done }
+  end
 end
 
-class Pet < EasyRecord
-  attr_accessor :name, :color, :person_id
+class List < EasyRecord
+  attr_accessor :name
 
-  belongs_to :owner, { class_name: 'Person' }, :person_id
-  has_many :toys, class_name: 'Toy'
+  belongs_to :user, { class_name: 'User' }, 'user_id'
+  has_many :tasks, class_name: 'Task'
 end
 
-class Toy < EasyRecord
-  attr_accessor :name, :pet_id
+class Task < EasyRecord
+  attr_accessor :name, :done
 
-  belongs_to :owner, { class_name: 'Pet' }, :pet_id
+  belongs_to :list, { class_name: 'List' }, 'list_id'
+
+  def toggle
+    @done = !@done
+  end
 end
 ```
 
 ### Models usage
 
 ```ruby
-person = Person.new
-pet = Pet.new
-toy = Toy.new
+user = User.new(name: "test")
+list = List.new(user_id: user.id)
+5.times do |i|
+  Task.new(name: "Task ##{i}", list_id: list.id)
+end
 
-pet.person = person
-# or
-person.pets.append(pet)
+user.tasks_left
+user.tasks.first.toggle
+user.tasks_left
 
-person.pets # => Array of peths
-pet.owner # => person
-
-toy.pet = pet
-# or
-pet.toys.append(toy)
-
-person.toys # => Array of toys
-pet.toys # => Array of toys
-
-toy.owner.owner # => person
+puts User.pluck(:name)
+puts User.pluck(:name, :id)
+puts User.count
 ```
