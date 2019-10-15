@@ -8,13 +8,7 @@ module Association
   end
 
   def belongs_to(name, model, target_id)
-    self.send(:define_method, "#{target_id}=".to_sym) do |value|
-      instance_variable_set("@" + target_id.to_s, value)
-    end
-
-    self.send(:define_method, target_id.to_sym) do
-      instance_variable_get("@" + target_id.to_s)
-    end
+    relate_target(target_id)
 
     self.define_method(name) do
       Object.const_get(model[:class_name]).all.find do |m|
@@ -38,6 +32,16 @@ module Association
       self.send(common_model_name[:through]).select do |m|
         m.send("#{self.class.name.snakecase}_id") == @id
       end.map { |m| m.send(name.to_s) }.flatten
+    end
+  end
+
+  def relate_target(target_id)
+    self.send(:define_method, "#{target_id}=".to_sym) do |value|
+      instance_variable_set("@" + target_id.to_s, value)
+    end
+
+    self.send(:define_method, target_id.to_sym) do
+      instance_variable_get("@" + target_id.to_s)
     end
   end
 end
