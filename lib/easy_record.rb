@@ -7,6 +7,7 @@ class EasyRecord
   require 'snake_camel'
   require 'pry'
   require 'UUID'
+  require 'dry/inflector'
 
   extend Association
   extend Field
