@@ -26,7 +26,7 @@ require 'easy_record'
 class User < EasyRecord
   field :name, String
 
-  has_many :lists, class_name: 'List'
+  has_many :lists
   has_many :tasks, through: :lists
 
   def tasks_left
@@ -37,15 +37,15 @@ end
 class List < EasyRecord
   field :name, String
 
-  belongs_to :user, { class_name: 'User' }, 'user_id'
-  has_many :tasks, class_name: 'Task'
+  belongs_to :owner, { class_name: 'User' }, :user_id
+  has_many :tasks
 end
 
 class Task < EasyRecord
   field :name, String
   field :done, :boolean, default: false
 
-  belongs_to :list, { class_name: 'List' }, 'list_id'
+  belongs_to :list
 
   def toggle
     @done = !@done
