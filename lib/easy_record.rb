@@ -1,6 +1,7 @@
 require_relative './easy_record/record'
 require_relative './easy_record/association'
 require_relative './easy_record/storage'
+require_relative './easy_record/field'
 
 class EasyRecord
   require 'snake_camel'
@@ -8,6 +9,7 @@ class EasyRecord
   require 'UUID'
 
   extend Association
+  extend Field
   include Storage
 
   attr_accessor :id
@@ -47,6 +49,7 @@ class EasyRecord
   def initialize(attributes = nil)
     Record.track(self)
 
+    set_attributes(self.class.instance_variable_get(:@_defaults))
     set_attributes(attributes)
     set(:id, UUID.generate)
   end
@@ -60,5 +63,4 @@ class EasyRecord
   def set(key, value)
     self.send("#{key}=", value)
   end
-
 end
