@@ -22,8 +22,9 @@ In Gemfile
 ### Models definitions
 ```ruby
 require 'easy_record'
+
 class User < EasyRecord
-  attr_accessor :name
+  field :name, String
 
   has_many :lists, class_name: 'List'
   has_many :tasks, through: :lists
@@ -34,14 +35,15 @@ class User < EasyRecord
 end
 
 class List < EasyRecord
-  attr_accessor :name
+  field :name, String
 
   belongs_to :user, { class_name: 'User' }, 'user_id'
   has_many :tasks, class_name: 'Task'
 end
 
 class Task < EasyRecord
-  attr_accessor :name, :done
+  field :name, String
+  field :done, :boolean, default: false
 
   belongs_to :list, { class_name: 'List' }, 'list_id'
 
@@ -67,4 +69,20 @@ user.tasks_left
 puts User.pluck(:name)
 puts User.pluck(:name, :id)
 puts User.count
+
+# Validations
+# User name field is declared as String so it cannot contain a Integer or any other type.
+user.name = 2 # <- Will raise a name cannot receive type `Integer` because it is defined as `String`
 ```
+
+### `field` usage
+`field` can take up to three arguments, the first one is the name of the field, the second one is the Type (May be any class or `:boolean` for true/false) and the last one is the options hash.
+Example:
+```ruby
+Class Something << EasyRecord
+	field :name, String, default: 
+end
+```
+
+#### Options
+**default**: the default value of the field when no data is given.
