@@ -1,4 +1,4 @@
-# # Easy Record
+# Easy Record
 
 Easy Record (easy_record) is a lightweight gem based on ActiveRecord, you can relate models only so
 far, but check te Features / Known issues to see what is planned to do. You can also open issues and
