@@ -75,14 +75,19 @@ puts User.count
 user.name = 2 # <- Will raise a name cannot receive type `Integer` because it is defined as `String`
 ```
 
-### `field` usage
+### The `field` method usage
 `field` can take up to three arguments, the first one is the name of the field, the second one is the Type (May be any class or `:boolean` for true/false) and the last one is the options hash.
 Example:
 ```ruby
-Class Something << EasyRecord
-	field :name, String, default: 
+Class Something < EasyRecord
+   field :name, String, default: 'someone'
 end
 ```
+#### Name
+It is just the name of the field and how you will access to it and how to update it. It creates a `attr_reader` and a method to assign new values (`#{name}=`).
+
+#### Type
+The type can be any class (Ruby standard classes or custom classes) and it will automatically validate.
 
 #### Options
 **default**: the default value of the field when no data is given.
