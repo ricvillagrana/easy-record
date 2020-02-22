@@ -79,7 +79,7 @@ user.name = 2 # <- Will raise a name cannot receive type `Integer` because it is
 `field` can take up to three arguments, the first one is the name of the field, the second one is the Type (May be any class or `:boolean` for true/false) and the last one is the options hash.
 Example:
 ```ruby
-Class Something < EasyRecord
+class Something < EasyRecord
    field :name, String, default: 'someone'
 end
 ```
