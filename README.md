@@ -24,6 +24,7 @@ In Gemfile
 require 'easy_record'
 
 class User < EasyRecord
+  field :age, Integer, null: false
   field :name, String
 
   has_many :lists
@@ -72,7 +73,10 @@ puts User.count
 
 # Validations
 # User name field is declared as String so it cannot contain a Integer or any other type.
-user.name = 2 # <- Will raise a name cannot receive type `Integer` because it is defined as `String`
+user.name = 2 # <- Will raise  name cannot receive type `Integer` because it is defined as `String`
+user.name = nil # This works
+user.age = "Three" # <- Will raise age cannot receive type `Sting` because it is defined as `Integer`
+user.age = nil # <- Will raise age cannot receive type `nil` because it is defined as `null: false`
 ```
 
 ### The `field` method usage
@@ -91,3 +95,4 @@ The type can be any class (Ruby standard classes or custom classes) and it will 
 
 #### Options
 **default**: the default value of the field when no data is given.
+**null**: the null option takes a boolean value and validates if the value is null or not, default value is true, so if you need a value to not be nil, do `null: false`.
