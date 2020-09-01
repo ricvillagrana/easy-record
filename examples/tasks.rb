@@ -2,6 +2,7 @@ require_relative '../lib/easy_record'
 
 class User < EasyRecord
   field :name, String
+  field :age, Integer, null: false
 
   has_many :lists
   has_many :tasks, through: :lists
@@ -29,7 +30,7 @@ class Task < EasyRecord
   end
 end
 
-user = User.new(name: "test")
+user = User.new(name: "test", age: 20)
 list = List.new(user_id: user.id)
 5.times do |i|
   Task.new(name: "Task ##{i}", list_id: list.id)
