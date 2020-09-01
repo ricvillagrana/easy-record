@@ -24,6 +24,8 @@ module Field
   end
 
   def self.validate(value, type)
+    return true if value == nil
+
     if type == :boolean
       return value.class == TrueClass || value.class == FalseClass
     end
