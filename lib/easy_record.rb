@@ -6,7 +6,7 @@ require_relative './easy_record/field'
 class EasyRecord
   require 'snake_camel'
   require 'pry'
-  require 'UUID'
+  require 'uuid'
   require 'dry/inflector'
 
   extend Association
