@@ -1,9 +1,10 @@
 require_relative '../lib/easy_record'
 
 class User < EasyRecord
-  attr_accessor :name
+  field :name, String
+  field :age, Integer, null: false
 
-  has_many :lists, class_name: 'List'
+  has_many :lists
   has_many :tasks, through: :lists
 
   def tasks_left
@@ -12,23 +13,24 @@ class User < EasyRecord
 end
 
 class List < EasyRecord
-  attr_accessor :name
+  field :name, String
 
-  belongs_to :user, { class_name: 'Person' }, 'user_id'
-  has_many :tasks, class_name: 'Task'
+  belongs_to :user
+  has_many :tasks
 end
 
 class Task < EasyRecord
-  attr_accessor :name, :done
+  field :name, String
+  field :done, :boolean, default: false
 
-  belongs_to :list, { class_name: 'List' }, 'list_id'
+  belongs_to :list
 
   def toggle
     @done = !@done
   end
 end
 
-user = User.new(name: "test")
+user = User.new(name: "test", age: 20)
 list = List.new(user_id: user.id)
 5.times do |i|
   Task.new(name: "Task ##{i}", list_id: list.id)

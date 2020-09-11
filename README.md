@@ -17,66 +17,82 @@ In Gemfile
 
 `gem 'easy-record', '~> 0.2.0'`
 
-## Features / Known issues
-- [x] Models associations.
-  - [x] `belongs_to`.
-  - [x] `has_many`.
-  - [x] `has_many :through`.
-- [x] Initialize with hash values.
-- [ ] Save to JSON
-  - [ ] Save to disk (as JSON).
-  - [ ] Restore from disk (JSON files).
-  - [ ] Save a single instance (append).
-  - [ ] Update a single instance (Rewrite only those records that are saved).
-  - [ ] Delete single records and untrack them.
-- [ ] Soft delete
-
 ## Usage
 
 ### Models definitions
 ```ruby
 require 'easy_record'
-class Person < EasyRecord
-  attr_accessor :name, :age
 
-  has_many :pets, class_name: 'Pet'
-  has_many :toys, through: :pets
+class User < EasyRecord
+  field :age, Integer, null: false
+  field :name, String
+
+  has_many :lists
+  has_many :tasks, through: :lists
+
+  def tasks_left
+    self.tasks.select { |task| !task.done }
+  end
 end
 
-class Pet < EasyRecord
-  attr_accessor :name, :color, :person_id
+class List < EasyRecord
+  field :name, String
 
-  belongs_to :owner, { class_name: 'Person' }, :person_id
-  has_many :toys, class_name: 'Toy'
+  belongs_to :owner, { class_name: 'User' }, :user_id
+  has_many :tasks
 end
 
-class Toy < EasyRecord
-  attr_accessor :name, :pet_id
+class Task < EasyRecord
+  field :name, String
+  field :done, :boolean, default: false
 
-  belongs_to :owner, { class_name: 'Pet' }, :pet_id
+  belongs_to :list
+
+  def toggle
+    @done = !@done
+  end
 end
 ```
 
 ### Models usage
 
 ```ruby
-person = Person.new
-pet = Pet.new
-toy = Toy.new
+user = User.new(name: "test")
+list = List.new(user_id: user.id)
+5.times do |i|
+  Task.new(name: "Task ##{i}", list_id: list.id)
+end
 
-pet.person = person
-# or
-person.pets.append(pet)
+user.tasks_left
+user.tasks.first.toggle
+user.tasks_left
 
-person.pets # => Array of peths
-pet.owner # => person
+puts User.pluck(:name)
+puts User.pluck(:name, :id)
+puts User.count
 
-toy.pet = pet
-# or
-pet.toys.append(toy)
-
-person.toys # => Array of toys
-pet.toys # => Array of toys
-
-toy.owner.owner # => person
+# Validations
+# User name field is declared as String so it cannot contain a Integer or any other type.
+user.name = 2 # <- Will raise  name cannot receive type `Integer` because it is defined as `String`
+user.name = nil # This works
+user.age = "Three" # <- Will raise age cannot receive type `Sting` because it is defined as `Integer`
+user.age = nil # <- Will raise age cannot receive type `nil` because it is defined as `null: false`
 ```
+
+### The `field` method usage
+`field` can take up to three arguments, the first one is the name of the field, the second one is the Type (May be any class or `:boolean` for true/false) and the last one is the options hash.
+Example:
+```ruby
+class Something < EasyRecord
+   field :name, String, default: 'someone'
+end
+```
+#### Name
+It is just the name of the field and how you will access to it and how to update it. It creates a `attr_reader` and a method to assign new values (`#{name}=`).
+
+#### Type
+The type can be any class (Ruby standard classes or custom classes) and it will automatically validate.
+
+#### Options
+**default**: the default value of the field when no data is given.
+**null**: the null option takes a boolean value and validates if the value is null or not, default value is true, so if you need a value to not be nil, do `null: false`.
