@@ -13,13 +13,15 @@ module Association
   end
 
   def belongs_to(name, model = nil, target_id = nil)
-    target_id ||= "#{name}_id"
+    target ||= "#{name}"
+    model_name = model&[:class_name] || Dry::Inflector.new.classify(name)
 
-    relate_target(target_id)
+
+    relate_target(target)
 
     define_method(name) do
-      Object.const_get(model[:class_name]).all.find do |m|
-        m.id == send(target_id)
+      Object.const_get(model_name).all.find do |m|
+        m.id == send("#{target}_id")
       end
     end
   end
@@ -44,15 +46,23 @@ module Association
     end
   end
 
-  def relate_target(target_id)
-    target_id = target_id.to_s
+  def relate_target(target)
+    target = target.to_s
 
-    send(:define_method, "#{target_id}=".to_sym) do |value|
-      instance_variable_set("@#{target_id}", value)
+    send(:define_method, "#{target}_id=") do |value|
+      instance_variable_set("@#{target}_id", value)
     end
 
-    send(:define_method, target_id.to_sym) do
-      instance_variable_get("@#{target_id}")
+    send(:define_method, "#{target}_id") do
+      instance_variable_get("@#{target}_id")
+    end
+
+    send(:define_method, "#{target}=") do |value|
+      instance_variable_set("@#{target}_id", value.id)
+    end
+
+    send(:define_method, "#{target}") do
+      instance_variable_get("@#{target}")
     end
   end
   # rubocop:enable Naming/PredicateName
