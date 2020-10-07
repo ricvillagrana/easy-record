@@ -1,38 +1,39 @@
+# frozen_string_literal: true
+
 module Field
   def field(name, type, **options)
-    self.instance_variable_set('@_defaults', {})\
-      if self.instance_variable_get('@_defaults').nil?
+    default_option = options[:default]
+
+    instance_variable_set('@_defaults', {})\
+      if instance_variable_get('@_defaults').nil?
 
     attr_reader name
-    generate_method(name, type, options)
 
-    unless options[:default].nil?
-      data = self.instance_variable_get('@_defaults')
-        .merge("#{name}": options[:default])
-      self.instance_variable_set('@_defaults', data)
-    end
+    generate_method(name, type, options)
+    return if default_option.nil?
+
+    data = instance_variable_get('@_defaults').merge("#{name}": default_option)
+    instance_variable_set('@_defaults', data)
   end
 
   def generate_method(name, type, options)
-    self.define_method("#{name}=") do |value|
-      if Field.validate(value, type)
-        if options[:null] == false && value == nil
-          raise "#{name} cannot receive type `nil` because it is defined as `null: false`"
-        end
-
-        instance_variable_set("@#{name}", value)
-      else
+    define_method("#{name}=") do |value|
+      unless Field.validate(value, type)
         raise "#{name} cannot receive type `#{value.class}` because it is defined as `#{type}`"
       end
+
+      if !options[:null] && value.nil?
+        raise "#{name} cannot receive type `nil` because it is defined as `null: false`"
+      end
+
+      instance_variable_set("@#{name}", value)
     end
   end
 
   def self.validate(value, type)
-    return true if value == nil
+    return true if value.nil?
 
-    if type == :boolean
-      return value.class == TrueClass || value.class == FalseClass
-    end
+    return value.class == TrueClass || value.class == FalseClass if type == :boolean
 
     value.class == type
   end
