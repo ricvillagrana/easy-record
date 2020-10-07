@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module Association
+  # rubocop:disable Naming/PredicateName
   def has_many(name, model_name = nil)
     model_name ||= { class_name: Dry::Inflector.new.classify(name) }
 
@@ -10,14 +13,13 @@ module Association
   end
 
   def belongs_to(name, model = nil, target_id = nil)
-    model_name ||= Dry::Inflector.new.classify(name)
-    target_id  ||= "#{name.to_s}_id"
+    target_id ||= "#{name}_id"
 
-    relate_target(target_id.to_s)
+    relate_target(target_id)
 
-    self.define_method(name) do
+    define_method(name) do
       Object.const_get(model[:class_name]).all.find do |m|
-        m.id == self.send(target_id.to_s)
+        m.id == send(target_id)
       end
     end
   end
@@ -25,7 +27,7 @@ module Association
   private
 
   def has_many_directly(name, model_name)
-    self.define_method(name) do
+    define_method(name) do
       Object.const_get(model_name[:class_name]).all.select do |m|
         m.send("#{self.class.name.snakecase}_id") == @id
       end
@@ -33,20 +35,25 @@ module Association
   end
 
   def has_many_through(name, common_model_name)
-    self.define_method(name) do
-      self.send(common_model_name[:through].to_s).select do |m|
+    define_method(name) do
+      pivot_records = send(common_model_name[:through].to_s).select do |m|
         m.send("#{self.class.name.snakecase}_id") == @id
-      end.map { |m| m.send(name.to_s) }.flatten
+      end
+
+      pivot_records.map { |m| m.send(name.to_s) }.flatten
     end
   end
 
   def relate_target(target_id)
-    self.send(:define_method, "#{target_id}=".to_sym) do |value|
-      instance_variable_set("@" + target_id.to_s, value)
+    target_id = target_id.to_s
+
+    send(:define_method, "#{target_id}=".to_sym) do |value|
+      instance_variable_set("@#{target_id}", value)
     end
 
-    self.send(:define_method, target_id.to_sym) do
-      instance_variable_get("@" + target_id.to_s)
+    send(:define_method, target_id.to_sym) do
+      instance_variable_get("@#{target_id}")
     end
   end
+  # rubocop:enable Naming/PredicateName
 end

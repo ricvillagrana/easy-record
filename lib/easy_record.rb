@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative './easy_record/record'
 require_relative './easy_record/association'
 require_relative './easy_record/storage'
@@ -17,12 +19,13 @@ class EasyRecord
 
   class << self
     def all
-      Record.of(self.to_s)
+      Record.of(to_s)
     end
 
     def pluck(*attributes)
       return [] if attributes.length.eql?(0)
       return all.collect { |record| record.send(attributes.first) } if attributes.length.eql?(1)
+
       all.collect do |record|
         attributes.collect do |attr|
           record.send(attr)
@@ -62,6 +65,6 @@ class EasyRecord
   end
 
   def set(key, value)
-    self.send("#{key}=", value)
+    send("#{key}=", value)
   end
 end

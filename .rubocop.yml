@@ -1,0 +1,67 @@
+# The behavior of RuboCop can be controlled via the .rubocop.yml
+# configuration file. It makes it possible to enable/disable
+# certain cops (checks) and to alter their behavior if they accept
+# any parameters. The file can be placed either in your home
+# directory or in some project directory.
+#
+# RuboCop will start looking for the configuration file in the directory
+# where the inspected file is and continue its way up to the root directory.
+#
+# See https://github.com/rubocop-hq/rubocop/blob/master/manual/configuration.md
+AllCops:
+  TargetRubyVersion: 2.6.5
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  NewCops: enable
+Lint/RedundantCopDisableDirective:
+  Enabled: false
+Layout/LineLength:
+  Max: 110
+Metrics/MethodLength:
+  Enabled: false
+Metrics/AbcSize:
+  Enabled: false
+Metrics/BlockLength:
+  Enabled: false
+Metrics/BlockNesting:
+  Enabled: false
+Metrics/ClassLength:
+  Enabled: false
+Metrics/CyclomaticComplexity:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Enabled: false
+Metrics/ModuleLength:
+  Enabled: false
+Metrics/ParameterLists:
+  Max: 6
+Documentation:
+  Enabled: false
+Style/AsciiComments:
+  Enabled: false
+Style/ClassAndModuleChildren:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
+Style/SymbolProc:
+  Enabled: false
+Style/DateTime:
+  Enabled: false
+Style/RescueModifier:
+  Enabled: false
+Style/RescueStandardError:
+  Enabled: false
+Style/ColonMethodCall:
+  Enabled: false
+Style/RandomWithOffset:
+  Enabled: false
+Style/DoubleNegation:
+  Enabled: false
+Style/GlobalVars:
+  Enabled: false
+Layout/CommentIndentation:
+  Enabled: false
+Naming/AccessorMethodName:
+  Enabled: false
+Naming/VariableNumber:
+  EnforcedStyle: snake_case
