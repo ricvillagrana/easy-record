@@ -49,6 +49,11 @@ module Association
   def relate_target(target)
     target = target.to_s
 
+    relate(target)
+    relate_with_postfix(target)
+  end
+
+  def relate(target)
     send(:define_method, "#{target}_id=") do |value|
       instance_variable_set("@#{target}_id", value)
     end
@@ -56,7 +61,9 @@ module Association
     send(:define_method, "#{target}_id") do
       instance_variable_get("@#{target}_id")
     end
+  end
 
+  def relate_with_postfix(target)
     send(:define_method, "#{target}=") do |value|
       instance_variable_set("@#{target}_id", value.id)
     end
