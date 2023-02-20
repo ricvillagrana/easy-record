@@ -6,7 +6,7 @@ PRs.
 
 [![Build with Ruby](http://img.shields.io/badge/made%20with-Ruby-7f1c1f.svg?style=for-the-badge&logo=ruby&labelColor=c1282c)](https://www.ruby-lang.org/)
 
-[![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/ricvillagrana)
+<a id="preview-btn" target="_blank" href="https://peachpay.me/ricardo/payme" style="background-color: rgb(255, 124, 113); background-image: url(&quot;https://peachpay.me/packs/peachpay-lgg-83178e076a5ada0d183a2344d48d63d4.svg&quot;) !important; background-repeat: no-repeat; border-radius: 2px; font-family: &quot;Open Sans&quot;, sans-serif; min-width: 40px; max-width: 320px; text-decoration: none; border: 0px; color: white !important; display: block; height: max-content; width: max-content; background-position: 6px 7px; background-size: 17px; font-size: 11px; padding: 8px 8px 8px 25px;">Donate PeachPay</a>
 
 ## Installation
 From terminal
